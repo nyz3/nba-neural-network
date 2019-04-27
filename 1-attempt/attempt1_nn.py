@@ -117,16 +117,38 @@ def partition_data(X_data, y_data):
     return X_train, y_train, X_v, y_v, X_test, y_test
 
 
-def gen_random_ml_data():
+def gen_random_ml_data(num_samples):
     """Generates random data of the same format as your team-stats ML data,
     for the sole purpose of comparing our neural network's performance to
     totally random data."""
     data = []
-    for i in range(5000):
+    for i in range(num_samples):
         temp = []
         for k in range(8):
             temp.append(random.uniform(0, 1))
         temp.append(random.choice([0, 1]))
+        data.append(temp)
+    return data
+
+
+def gen_good_random_ml_data(num_samples):
+    """Generates 'good' random data so we can see if our neural network can
+    detect obvious patterns in fake data with the same shape as our real data.
+    We use this to check that our neural network isn't broken."""
+    data = []
+    for i in range(num_samples):
+        winner = random.choice([0, 1])
+        pos_data = []
+        neg_data = []
+        for k in range(4):
+            pos_data.append(random.uniform(0.5, 1))
+        for k in range(4):
+            neg_data.append(random.uniform(0, 0.5))
+        if winner == 1:
+            temp = pos_data + neg_data
+        else:
+            temp = neg_data + pos_data
+        temp.append(winner)
         data.append(temp)
     return data
 
@@ -138,7 +160,7 @@ if __name__ == "__main__":
     X_data, y_data = split_xy(team_learning_data)
     X_train, y_train, X_v, y_v, X_test, y_test = partition_data(X_data, y_data)
 
-    model = NeuralNetwork(8, 8, 1)
+    model = NeuralNetwork(8, 4, 1)
     loss_fn = nn.BCELoss()
     optimizer = opt.SGD(model.parameters(), lr=0.01, momentum=0.9)
 

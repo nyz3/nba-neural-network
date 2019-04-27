@@ -1,7 +1,7 @@
 import pymongo
 import ssl
 
-LOOKBACK_RANGE = 3
+LOOKBACK_RANGE = 5
 
 DB_URL = \
     "mongodb+srv://cs4701:password123!@cluster0-ao7be.mongodb.net/" + \
