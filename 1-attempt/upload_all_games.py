@@ -14,7 +14,7 @@ HEADERS = {
 }
 DB_URL = \
     "mongodb+srv://cs4701:password123!@cluster0-ao7be.mongodb.net/" + \
-    "nbaData?retryWrites=true"
+    "attempt1?retryWrites=true"
 
 
 def get_all_games(season):
@@ -119,11 +119,11 @@ def compile_games(all_games):
 
 def send_to_mongo(data_list):
     """
-    Sends data_list to our MongoDB collection `allGames` in db `nbaData
+    Sends data_list to our MongoDB collection `allGames` in db `attempt1`.
     data_list is a list of dictionaries.
     """
     client = pymongo.MongoClient(DB_URL, ssl=True, ssl_cert_reqs=ssl.CERT_NONE)
-    db = client.nbaData
+    db = client.attempt1
     result = db.allGames.insert_many(data_list)
     return result.inserted_ids
 

@@ -11,7 +11,7 @@ LEARNING_RATE = 0.01
 TOTAL_EPOCHS = 100
 DB_URL = \
     "mongodb+srv://cs4701:password123!@cluster0-ao7be.mongodb.net/" + \
-    "nbaData?retryWrites=true"
+    "attempt1?retryWrites=true"
 
 
 class NeuralNetwork(nn.Module):
@@ -69,8 +69,8 @@ def get_team_stats():
     """Returns a list of all the team-level ML stats for each game, as well as
     the outcome. Each list has the form [0..., 0..., 0..., 0..., ..., 1/0]"""
     client = pymongo.MongoClient(DB_URL, ssl=True, ssl_cert_reqs=ssl.CERT_NONE)
-    db = client.nbaData
-    ml_stats = db.learningStats_v1
+    db = client.attempt1
+    ml_stats = db.learningStats
     parsed_stats = []
     for game_stats in ml_stats.find():
         del game_stats["_id"]

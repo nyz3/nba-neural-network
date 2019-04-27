@@ -1,11 +1,11 @@
 import pymongo
 import ssl
 
-LOOKBACK_RANGE = 10
+LOOKBACK_RANGE = 3
 
 DB_URL = \
     "mongodb+srv://cs4701:password123!@cluster0-ao7be.mongodb.net/" + \
-    "nbaData?retryWrites=true"
+    "attempt1?retryWrites=true"
 
 
 def eff_fg_pct(fgm, fgm3, fga):
@@ -41,7 +41,7 @@ def free_throw_rate(fta, fga):
 def get_all_games():
     """Gets all games stored in MongoDB Atlas."""
     client = pymongo.MongoClient(DB_URL, ssl=True, ssl_cert_reqs=ssl.CERT_NONE)
-    db = client.nbaData
+    db = client.attempt1
     allGames = db.allGames
     return allGames
 
@@ -123,12 +123,12 @@ def compute_ml_stats(allGames):
 
 def send_to_mongo(ml_stats):
     """
-    Sends data_list to our MongoDB collection `learningStats_v1` in db `nbaData
-    data_list is a list of dictionaries.
+    Sends data_list to our MongoDB collection `learningStats`
+    in db `attempt1`. `data_list` is a list of dictionaries.
     """
     client = pymongo.MongoClient(DB_URL, ssl=True, ssl_cert_reqs=ssl.CERT_NONE)
-    db = client.nbaData
-    result = db.learningStats_v1.insert_many(ml_stats)
+    db = client.attempt1
+    result = db.learningStats.insert_many(ml_stats)
     return result.inserted_ids
 
 
