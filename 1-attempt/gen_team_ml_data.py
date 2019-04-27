@@ -77,7 +77,8 @@ def compute_ml_stats(allGames):
         if team_a_id in team_game_dict and team_b_id in team_game_dict:
             team_a_hist = team_game_dict[team_a_id]
             team_b_hist = team_game_dict[team_b_id]
-            if len(team_a_hist) >= 30 and len(team_b_hist) >= 30:
+            if len(team_a_hist) >= LOOKBACK_RANGE and \
+               len(team_b_hist) >= LOOKBACK_RANGE:
                 a_fgm = sum([a["fgm"] for a in team_a_hist])
                 a_fgm3 = sum([a["fgm3"] for a in team_a_hist])
                 a_fga = sum([a["fga"] for a in team_a_hist])
