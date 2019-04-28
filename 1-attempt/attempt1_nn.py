@@ -8,7 +8,7 @@ import random
 
 
 LEARNING_RATE = 0.01
-TOTAL_EPOCHS = 100
+TOTAL_EPOCHS = 1000
 DB_URL = \
     "mongodb+srv://cs4701:password123!@cluster0-ao7be.mongodb.net/" + \
     "attempt1?retryWrites=true"
