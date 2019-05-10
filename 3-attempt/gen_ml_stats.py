@@ -1,19 +1,23 @@
 import pymongo
 import ssl
 
-DB_URL = \
+CORE_DB_URL = \
     "mongodb+srv://cs4701:password123!@cluster0-ao7be.mongodb.net/" + \
-    "attempt1?retryWrites=true"
+    "coreData?retryWrites=true"
 
-DB_URL_3 = \
+DB_URL = \
     "mongodb+srv://cs4701:password123!@cluster0-ao7be.mongodb.net/" + \
     "attempt3?retryWrites=true"
 
 
 def get_all_games():
     """Gets all games stored in MongoDB Atlas."""
-    client = pymongo.MongoClient(DB_URL, ssl=True, ssl_cert_reqs=ssl.CERT_NONE)
-    db = client.attempt1
+    client = pymongo.MongoClient(
+        CORE_DB_URL,
+        ssl=True,
+        ssl_cert_reqs=ssl.CERT_NONE
+    )
+    db = client.coreData
     allGames = db.allGames
     return allGames
 
@@ -21,9 +25,9 @@ def get_all_games():
 def send_to_mongo(ml_stats):
     """
     Sends data_list to our MongoDB collection `learningStats`
-    in db `attempt1`. `data_list` is a list of dictionaries.
+    in db `attempt3`. `data_list` is a list of dictionaries.
     """
-    client = pymongo.MongoClient(DB_URL_3, ssl=True, ssl_cert_reqs=ssl.CERT_NONE)
+    client = pymongo.MongoClient(DB_URL, ssl=True, ssl_cert_reqs=ssl.CERT_NONE)
     db = client.attempt3
     result = db.learningStats.insert_many(ml_stats)
     return result.inserted_ids

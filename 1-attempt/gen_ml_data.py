@@ -7,6 +7,10 @@ DB_URL = \
     "mongodb+srv://cs4701:password123!@cluster0-ao7be.mongodb.net/" + \
     "attempt1?retryWrites=true"
 
+CORE_DB_URL = \
+    "mongodb+srv://cs4701:password123!@cluster0-ao7be.mongodb.net/" + \
+    "coreData?retryWrites=true"
+
 
 def eff_fg_pct(fgm, fgm3, fga):
     """Computes the effective field goal percentage given fgm, fgm3, fga.
@@ -40,8 +44,12 @@ def free_throw_rate(fta, fga):
 
 def get_all_games():
     """Gets all games stored in MongoDB Atlas."""
-    client = pymongo.MongoClient(DB_URL, ssl=True, ssl_cert_reqs=ssl.CERT_NONE)
-    db = client.attempt1
+    client = pymongo.MongoClient(
+        CORE_DB_URL,
+        ssl=True,
+        ssl_cert_reqs=ssl.CERT_NONE
+    )
+    db = client.coreData
     allGames = db.allGames
     return allGames
 
