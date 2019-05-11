@@ -11,7 +11,7 @@ LEARNING_RATE = 0.01
 TOTAL_EPOCHS = 1000
 DB_URL = \
     "mongodb+srv://cs4701:password123!@cluster0-ao7be.mongodb.net/" + \
-    "attempt1?retryWrites=true"
+    "attempt2?retryWrites=true"
 
 
 class NeuralNetwork(nn.Module):
@@ -69,7 +69,7 @@ def get_team_stats():
     """Returns a list of all the team-level ML stats for each game, as well as
     the outcome. Each list has the form [0..., 0..., 0..., 0..., ..., 1/0]"""
     client = pymongo.MongoClient(DB_URL, ssl=True, ssl_cert_reqs=ssl.CERT_NONE)
-    db = client.attempt1
+    db = client.attempt2
     ml_stats = db.learningStats
     parsed_stats = []
     for game_stats in ml_stats.find():
@@ -160,7 +160,7 @@ if __name__ == "__main__":
     X_data, y_data = split_xy(team_learning_data)
     X_train, y_train, X_v, y_v, X_test, y_test = partition_data(X_data, y_data)
 
-    model = NeuralNetwork(8, 4, 1)
+    model = NeuralNetwork(9, 6, 1)
     loss_fn = nn.BCELoss()
     optimizer = opt.SGD(model.parameters(), lr=0.01, momentum=0.9)
 
