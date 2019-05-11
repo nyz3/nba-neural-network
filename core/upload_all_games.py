@@ -146,6 +146,8 @@ if __name__ == "__main__":
         compiled_data = compile_games(all_games)
         data_list = []
         for game_id in compiled_data:
-            data_list.append(compiled_data[game_id])
+            game_data = compiled_data[game_id]
+            game_data["season"] = season
+            data_list.append(game_data)
         send_to_mongo(data_list)
         print("Completed processing data for season " + season)
