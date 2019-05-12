@@ -37,29 +37,15 @@ if __name__ == "__main__":
     allGames = get_all_games()
     data = []
     for game in allGames.find():
-        matchup_name = game["matchup_name"]
-        matchup_parts = matchup_name.split()
-        if matchup_parts[1] == "@":
-            home_team_abbrev = matchup_parts[2]
-            away_team_abbrev = matchup_parts[0]
-        else:
-            home_team_abbrev = matchup_parts[0]
-            away_team_abbrev = matchup_parts[2]
         game_winner = game["winner"]
-        team_a_abbrev = game["team_a_team_abbrev"]
-        team_b_abbrev = game["team_b_team_abbrev"]
-        if team_a_abbrev == home_team_abbrev:
-            home_team = "a"
-        else:
-            home_team = "b"
-
-        if home_team == "a":
-            ht = 1
-        elif home_team == "b":
-            ht = 0
-        record = {
-            "home_team": ht,
+        home_record = {
+            "home_team": 1,
             "winner": game_winner
         }
-        data.append(record)
+        away_record = {
+            "home_team": 0,
+            "winner": 0 if game_winner == 1 else 1
+        }
+        data.append(home_record)
+        data.append(away_record)
     send_to_mongo(data)
