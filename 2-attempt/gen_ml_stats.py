@@ -23,20 +23,6 @@ def get_all_games():
     return allGames
 
 
-def get_home_team(game):
-    matchup = game["matchup_name"]
-    if "@" in matchup.split():
-        home_abbrev = matchup.split()[2]
-    else:
-        home_abbrev = matchup.split()[0]
-
-    team_a_abbrev = game["team_a_team_abbrev"]
-    if home_abbrev == team_a_abbrev:
-        return 1
-    else:
-        return 0
-
-
 def send_to_mongo(ml_stats):
     """
     Sends data_list to our MongoDB collection `learningStats`
@@ -69,76 +55,75 @@ if __name__ == "__main__":
         team_season_hist = {}
         for idx, game in enumerate(season_games):
 
-            team_a_id = game["team_a_team_id"]
-            team_b_id = game["team_b_team_id"]
+            home_id = game["home_team_id"]
+            away_id = game["away_team_id"]
 
-            team_a_points = game["team_a_points"]
-            team_a_assists = game["team_a_assists"]
-            team_a_turnovers = game["team_a_turnovers"]
-            team_b_points = game["team_b_points"]
-            team_b_assists = game["team_b_assists"]
-            team_b_turnovers = game["team_b_turnovers"]
+            home_points = game["home_points"]
+            home_assists = game["home_assists"]
+            home_turnovers = game["home_turnovers"]
+            away_points = game["away_points"]
+            away_assists = game["away_assists"]
+            away_turnovers = game["away_turnovers"]
 
             # Use current history, winner data, and old stats to add a dict
             # record to ml_data
             winner = game["winner"]
-            if team_a_id in team_season_hist:
-                team_a_games = team_season_hist[team_a_id]
-                team_a_points_total = sum([i[0] for i in team_a_games])
-                team_a_assists_total = sum([i[1] for i in team_a_games])
-                team_a_turnovers_total = sum([i[2] for i in team_a_games])
-                team_a_points_avg = team_a_points_total / len(team_a_games)
-                team_a_assists_avg = team_a_assists_total / len(team_a_games)
-                team_a_turnovers_avg = team_a_turnovers_total / len(team_a_games)
-                team_a_game_num = len(team_a_games)
+            if home_id in team_season_hist:
+                home_games = team_season_hist[home_id]
+                home_points_total = sum([i[0] for i in home_games])
+                home_assists_total = sum([i[1] for i in home_games])
+                home_turnovers_total = sum([i[2] for i in home_games])
+                home_points_avg = home_points_total / len(home_games)
+                home_assists_avg = home_assists_total / len(home_games)
+                home_turnovers_avg = home_turnovers_total / len(home_games)
+                home_game_num = len(home_games)
             else:
-                team_a_points_avg = 0
-                team_a_assists_avg = 0
-                team_a_turnovers_avg = 0
-                team_a_game_num = 0
+                home_points_avg = 0
+                home_assists_avg = 0
+                home_turnovers_avg = 0
+                home_game_num = 0
 
-            if team_b_id in team_season_hist:
-                team_b_games = team_season_hist[team_b_id]
-                team_b_points_total = sum([i[0] for i in team_b_games])
-                team_b_assists_total = sum([i[1] for i in team_b_games])
-                team_b_turnovers_total = sum([i[2] for i in team_b_games])
-                team_b_points_avg = team_b_points_total / len(team_b_games)
-                team_b_assists_avg = team_b_assists_total / len(team_b_games)
-                team_b_turnovers_avg = team_b_turnovers_total / len(team_b_games)
-                team_b_game_num = len(team_b_games)
+            if away_id in team_season_hist:
+                away_games = team_season_hist[away_id]
+                away_points_total = sum([i[0] for i in away_games])
+                away_assists_total = sum([i[1] for i in away_games])
+                away_turnovers_total = sum([i[2] for i in away_games])
+                away_points_avg = away_points_total / len(away_games)
+                away_assists_avg = away_assists_total / len(away_games)
+                away_turnovers_avg = away_turnovers_total / len(away_games)
+                away_game_num = len(away_games)
             else:
-                team_b_points_avg = 0
-                team_b_assists_avg = 0
-                team_b_turnovers_avg = 0
-                team_b_game_num = 0
+                away_points_avg = 0
+                away_assists_avg = 0
+                away_turnovers_avg = 0
+                away_game_num = 0
 
             # Upload to ml stats
             game_ml_data = {
-                "team_a_game_num": team_a_game_num,
-                "team_b_game_num": team_b_game_num,
+                "home_game_num": home_game_num,
+                "away_game_num": away_game_num,
                 "game_id": game["game_id"],
                 "winner": winner,
-                "team_a_points_avg": team_a_points_avg,
-                "team_a_assists_avg": team_a_assists_avg,
-                "team_a_turnovers_avg": team_a_turnovers_avg,
-                "team_b_points_avg": team_b_points_avg,
-                "team_b_assists_avg": team_b_assists_avg,
-                "team_b_turnovers_avg": team_b_turnovers_avg,
-                "home": get_home_team(game)
+                "home_points_avg": home_points_avg,
+                "home_assists_avg": home_assists_avg,
+                "home_turnovers_avg": home_turnovers_avg,
+                "away_points_avg": away_points_avg,
+                "away_assists_avg": away_assists_avg,
+                "away_turnovers_avg": away_turnovers_avg
             }
             ml_data.append(game_ml_data)
 
-            team_a_stats = (team_a_points, team_a_assists, team_a_turnovers)
-            team_b_stats = (team_b_points, team_b_assists, team_b_turnovers)
-            if team_a_id in team_season_hist:
-                team_season_hist[team_a_id].append(team_a_stats)
+            home_stats = (home_points, home_assists, home_turnovers)
+            away_stats = (away_points, away_assists, away_turnovers)
+            if home_id in team_season_hist:
+                team_season_hist[home_id].append(home_stats)
             else:
-                team_season_hist[team_a_id] = [team_a_stats]
+                team_season_hist[home_id] = [home_stats]
 
-            if team_b_id in team_season_hist:
-                team_season_hist[team_b_id].append(team_b_stats)
+            if away_id in team_season_hist:
+                team_season_hist[away_id].append(away_stats)
             else:
-                team_season_hist[team_b_id] = [team_b_stats]
+                team_season_hist[away_id] = [away_stats]
 
     send_to_mongo(ml_data)
     print("Done.")

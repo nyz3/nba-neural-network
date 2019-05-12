@@ -3,6 +3,7 @@ import pymongo
 import ssl
 sys.path.append('../../')
 import nba_net.core.networks as net
+import pprint
 
 
 DB_URL = \
@@ -20,11 +21,15 @@ def get_stats():
     for game_stats in ml_stats.find():
         del game_stats["_id"]
         del game_stats["game_id"]
-        parsed_stats.append(list(game_stats.values()))
+        winner = game_stats["winner"]
+        del game_stats["winner"]
+        stats = list(game_stats.values())
+        stats.append(winner)
+        parsed_stats.append(stats)
     return parsed_stats
 
 
 if __name__ == "__main__":
     team_stats = get_stats()
-    model = net.OneLayer(9, 7, 1)
+    model = net.OneLayer(8, 7, 1)
     net.train_model(30000, 0.01, model, team_stats)

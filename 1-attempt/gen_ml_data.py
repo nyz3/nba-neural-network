@@ -62,69 +62,69 @@ def compute_ml_stats(allGames):
     ml_stats = {}
     idx = 0
     for game in allGames.find():
-        a_game_stats = {
-            "fgm": game["team_a_field_goals_made"],
-            "fgm3": game["team_a_three_ptr_made"],
-            "fga": game["team_a_field_goals_attempted"],
-            "orb": game["team_a_offensive_rebounds"],
-            "drb_opp": game["team_b_defensive_rebounds"],
-            "tov": game["team_a_turnovers"],
-            "fta": game["team_a_free_throws_attempted"]
+        home_game_stats = {
+            "fgm": game["home_field_goals_made"],
+            "fgm3": game["home_three_ptr_made"],
+            "fga": game["home_field_goals_attempted"],
+            "orb": game["home_offensive_rebounds"],
+            "drb_opp": game["away_defensive_rebounds"],
+            "tov": game["home_turnovers"],
+            "fta": game["home_free_throws_attempted"]
         }
-        b_game_stats = {
-            "fgm": game["team_b_field_goals_made"],
-            "fgm3": game["team_b_three_ptr_made"],
-            "fga": game["team_b_field_goals_attempted"],
-            "orb": game["team_b_offensive_rebounds"],
-            "drb_opp": game["team_a_defensive_rebounds"],
-            "tov": game["team_b_turnovers"],
-            "fta": game["team_b_free_throws_attempted"]
+        away_game_stats = {
+            "fgm": game["away_field_goals_made"],
+            "fgm3": game["away_three_ptr_made"],
+            "fga": game["away_field_goals_attempted"],
+            "orb": game["away_offensive_rebounds"],
+            "drb_opp": game["home_defensive_rebounds"],
+            "tov": game["away_turnovers"],
+            "fta": game["away_free_throws_attempted"]
         }
-        team_a_id = game["team_a_team_id"]
-        team_b_id = game["team_b_team_id"]
-        if team_a_id in team_game_dict and team_b_id in team_game_dict:
-            team_a_hist = team_game_dict[team_a_id]
-            team_b_hist = team_game_dict[team_b_id]
-            if len(team_a_hist) >= LOOKBACK_RANGE and \
-               len(team_b_hist) >= LOOKBACK_RANGE:
-                a_fgm = sum([a["fgm"] for a in team_a_hist])
-                a_fgm3 = sum([a["fgm3"] for a in team_a_hist])
-                a_fga = sum([a["fga"] for a in team_a_hist])
-                a_orb = sum([a["orb"] for a in team_a_hist])
-                a_drb_opp = sum([a["drb_opp"] for a in team_a_hist])
-                a_tov = sum([a["tov"] for a in team_a_hist])
-                a_fta = sum([a["fta"] for a in team_a_hist])
+        home_id = game["home_team_id"]
+        away_id = game["away_team_id"]
+        if home_id in team_game_dict and away_id in team_game_dict:
+            home_hist = team_game_dict[home_id]
+            away_hist = team_game_dict[away_id]
+            if len(home_hist) >= LOOKBACK_RANGE and \
+               len(away_hist) >= LOOKBACK_RANGE:
+                home_fgm = sum([a["fgm"] for a in home_hist])
+                home_fgm3 = sum([a["fgm3"] for a in home_hist])
+                home_fga = sum([a["fga"] for a in home_hist])
+                home_orb = sum([a["orb"] for a in home_hist])
+                home_drb_opp = sum([a["drb_opp"] for a in home_hist])
+                home_tov = sum([a["tov"] for a in home_hist])
+                home_fta = sum([a["fta"] for a in home_hist])
 
-                b_fgm = sum([b["fgm"] for b in team_b_hist])
-                b_fgm3 = sum([b["fgm3"] for b in team_b_hist])
-                b_fga = sum([b["fga"] for b in team_b_hist])
-                b_orb = sum([b["orb"] for b in team_b_hist])
-                b_drb_opp = sum([b["drb_opp"] for b in team_b_hist])
-                b_tov = sum([b["tov"] for b in team_b_hist])
-                b_fta = sum([b["fta"] for b in team_b_hist])
+                away_fgm = sum([b["fgm"] for b in away_hist])
+                away_fgm3 = sum([b["fgm3"] for b in away_hist])
+                away_fga = sum([b["fga"] for b in away_hist])
+                away_orb = sum([b["orb"] for b in away_hist])
+                away_drb_opp = sum([b["drb_opp"] for b in away_hist])
+                away_tov = sum([b["tov"] for b in away_hist])
+                away_fta = sum([b["fta"] for b in away_hist])
                 ml_stats[game["game_id"]] = {
                     "game_id": game["game_id"],
-                    "team_a_efg_pct": eff_fg_pct(a_fgm, a_fgm3, a_fga),
-                    "team_a_tov_pct": turnover_pct(a_fga, a_orb, a_tov, a_fta),
-                    "team_a_orb_pct": off_reb_pct(a_orb, a_drb_opp),
-                    "team_a_ft_pct": free_throw_rate(a_fta, a_fga),
-                    "team_b_efg_pct": eff_fg_pct(b_fgm, b_fgm3, b_fga),
-                    "team_b_tov_pct": turnover_pct(b_fga, b_orb, b_tov, b_fta),
-                    "team_b_orb_pct": off_reb_pct(b_orb, b_drb_opp),
-                    "team_b_ft_pct": free_throw_rate(b_fta, b_fga),
+                    "home_efg_pct": eff_fg_pct(home_fgm, home_fgm3, home_fga),
+                    "home_tov_pct": turnover_pct(home_fga, home_orb, home_tov, home_fta),
+                    "home_orb_pct": off_reb_pct(home_orb, home_drb_opp),
+                    "home_ft_pct": free_throw_rate(home_fta, home_fga),
+                    "away_efg_pct": eff_fg_pct(away_fgm, away_fgm3, away_fga),
+                    "away_tov_pct": turnover_pct(away_fga, away_orb, away_tov, away_fta),
+                    "away_orb_pct": off_reb_pct(away_orb, away_drb_opp),
+                    "away_ft_pct": free_throw_rate(away_fta, away_fga),
                     "winner": game["winner"]
                 }
-                team_game_dict[game["team_a_team_id"]].pop(0)
-                team_game_dict[game["team_b_team_id"]].pop(0)
-            team_game_dict[game["team_a_team_id"]].append(a_game_stats)
-            team_game_dict[game["team_b_team_id"]].append(b_game_stats)
-        elif game["team_a_team_id"] in team_game_dict:
-            team_game_dict[game["team_b_team_id"]] = [b_game_stats]
-        elif game["team_b_team_id"] in team_game_dict:
-            team_game_dict[game["team_a_team_id"]] = [a_game_stats]
+                team_game_dict[game["home_team_id"]].pop(0)
+                team_game_dict[game["away_team_id"]].pop(0)
+            team_game_dict[game["home_team_id"]].append(home_game_stats)
+            team_game_dict[game["away_team_id"]].append(away_game_stats)
+        elif game["home_team_id"] in team_game_dict:
+            team_game_dict[game["away_team_id"]] = [away_game_stats]
+        elif game["away_team_id"] in team_game_dict:
+            team_game_dict[game["home_team_id"]] = [home_game_stats]
         else:
-            team_game_dict[game["team_a_team_id"]] = [a_game_stats]
-            team_game_dict[game["team_b_team_id"]] = [b_game_stats]
+            team_game_dict[game["home_team_id"]] = [home_game_stats]
+            team_game_dict[game["away_team_id"]] = [away_game_stats]
         idx += 1
         print("Processed game " + str(idx))
     return list(ml_stats.values())

@@ -91,6 +91,14 @@ def rename_features(team_data, prefix):
     return new_dict
 
 
+def get_home_team(matchup):
+    matchup = matchup.split()
+    if "@" in matchup:
+        return matchup[2]
+    else:
+        return matchup[0]
+
+
 def compile_games(all_games):
     """
     Takes a list of lists (game data from the NBA API) and returns a dictionary
@@ -100,15 +108,26 @@ def compile_games(all_games):
     for game_data in all_games:
         game_id = game_data[4]
         team_data = extract_team_data(game_data)
+        home_team_abbrev = get_home_team(game_data[6])
+        if team_data["team_abbrev"] == home_team_abbrev:
+            home_team = True
+            team_data = rename_features(team_data, "home")
+        else:
+            home_team = False
+            team_data = rename_features(team_data, "away")
+
         if game_id in compiled_games:
             compiled_games[game_id] = {
                 **compiled_games[game_id],
-                **rename_features(team_data, "team_b")
+                **team_data
             }
         else:
+            if home_team:
+                winner = 1 if game_data[7] == "W" else 0
+            else:
+                winner = 0 if game_data[7] == "W" else 1
             # game_date, win/loss, matchup all needed exactly once
-            compiled_games[game_id] = rename_features(team_data, "team_a")
-            winner = 1 if game_data[7] == "W" else 0
+            compiled_games[game_id] = team_data
             compiled_games[game_id]["winner"] = winner
             compiled_games[game_id]["game_date"] = game_data[5]
             compiled_games[game_id]["game_id"] = game_id

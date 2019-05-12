@@ -26,5 +26,5 @@ def get_team_stats():
 
 if __name__ == "__main__":
     team_stats = get_team_stats()
-    model = net.OneLayer(8, 4, 1)
-    net.train_model(100000, 0.01, model, team_stats)
+    model = net.OneLayer(8, 5, 1)
+    net.train_model(50000, 0.01, model, team_stats)
