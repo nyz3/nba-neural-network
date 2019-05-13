@@ -57,9 +57,15 @@ def filter_data(game_stats):
     away_data = []
 
     for pd in hp:
+        home_data.append(pd["def_rating"])
+        home_data.append(pd["off_rating"])
         home_data.append(pd["plus_minus"])
+        home_data.append(pd["usg_pct"])
     for pd in ap:
+        away_data.append(pd["def_rating"])
+        away_data.append(pd["off_rating"])
         away_data.append(pd["plus_minus"])
+        away_data.append(pd["usg_pct"])
 
     return home_data, away_data
 
@@ -87,5 +93,5 @@ def get_team_stats():
 
 if __name__ == "__main__":
     team_stats = get_team_stats()
-    model = net.OneLayer(30, 15, 1)
-    net.train_model(10000, 0.0005, model, team_stats)
+    model = net.OneLayer(120, 60, 1)
+    net.train_model(10000, 0.00019, model, team_stats)
