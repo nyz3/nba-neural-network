@@ -108,7 +108,7 @@ class Util:
         return X_train, y_train, X_v, y_v, X_test, y_test
 
 
-def train_model(total_epochs, learning_rate, model, learning_data):
+def train_model(total_epochs, learning_rate, model, learning_data, no_graph=False):
     random.shuffle(learning_data)
 
     X_data, y_data = Util.split_xy(learning_data)
@@ -136,9 +136,10 @@ def train_model(total_epochs, learning_rate, model, learning_data):
             .format(epoch, total_epochs, tl, vl, acc)
         print(log_str)
 
-    Util.plot_stats(
-        total_epochs,
-        training_losses,
-        validation_losses,
-        accuracies
-    )
+    if not no_graph:
+        Util.plot_stats(
+            total_epochs,
+            training_losses,
+            validation_losses,
+            accuracies
+        )
