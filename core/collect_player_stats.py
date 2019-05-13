@@ -1,7 +1,6 @@
 import requests
 import pymongo
 import ssl
-import pprint
 import time
 
 ENV = 1
@@ -119,10 +118,7 @@ def compute_url_pairs(all_games):
 
 
 def partition_list(urls):
-    if ENV == 1:
-        return urls[:len(urls)//2]
-    else:
-        return urls[len(urls)//2:]
+    return urls
 
 
 if __name__ == "__main__":
