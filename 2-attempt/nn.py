@@ -35,4 +35,4 @@ def get_stats():
 if __name__ == "__main__":
     team_stats = get_stats()
     model = net.OneLayer(8, 7, 1)
-    net.train_model(30000, 0.01, model, team_stats)
+    net.train_model(1750, 0.01, model, team_stats)

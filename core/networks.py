@@ -19,6 +19,22 @@ class OneLayer(nn.Module):
         return y_pred
 
 
+class TwoLayer(nn.Module):
+    """A neural network with exactly 1 hidden layer."""
+    def __init__(self, num_inputs, num_hidden1, num_hidden2, num_out):
+        super(TwoLayer, self).__init__()
+
+        self.layer1 = nn.Linear(num_inputs, num_hidden1)
+        self.layer2 = nn.Linear(num_hidden1, num_hidden2)
+        self.layer3 = nn.Linear(num_hidden2, num_out)
+
+    def forward(self, X):
+        h_out = torch.sigmoid(self.layer1(X))
+        h1_out = torch.sigmoid(self.layer2(h_out))
+        y_pred = torch.sigmoid(self.layer3(h1_out))
+        return y_pred
+
+
 class Util:
     """A class that contains all the utilities needed for training and
     evaluating our model."""
